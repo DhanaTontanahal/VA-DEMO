@@ -4,6 +4,7 @@ import { BankTabItem } from "./BankTabItem";
 import BankInfo from "./BankInfo";
 import TransactionsTable from "./TransactionsTable";
 import { Pagination } from "./Pagination";
+import RecentTransaction from "../components/RecentTransaction";
 
 const RecentTransactions = ({
   accounts,
@@ -33,6 +34,8 @@ const RecentTransactions = ({
           View all
         </Link>
       </header>
+
+      <RecentTransaction />
 
       <Tabs defaultValue={appwriteItemId} className="w-full">
         <TabsList className="recent-transactions-tablist">

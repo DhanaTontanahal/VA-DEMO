@@ -1,8 +1,10 @@
 const express = require("express");
+const cors = require("cors");
 const mysql = require("mysql2");
 const app = express();
-const port = 3005;
+const port = 3006;
 
+app.use(cors());
 app.use(express.json());
 
 // Endpoint to get account balance based on email
@@ -47,6 +49,50 @@ app.get("/api/account-balance", (req, res) => {
         accountNumber: balanceResults[0].account_number,
         balance: balanceResults[0].balance,
       });
+    });
+  });
+});
+
+app.get("/api/recent-transactions", (req, res) => {
+  const email = req.query.email; // Get email from query params
+
+  if (!email) {
+    return res.status(400).json({ error: "Email is required" });
+  }
+
+  const getUserQuery = "SELECT user_id FROM users WHERE user_email = ?";
+  const getTransactionsQuery = `
+      SELECT transaction_id, transaction_type, transaction_amount, transaction_datetime 
+      FROM transactions 
+      WHERE user_id = ? 
+      ORDER BY transaction_datetime DESC 
+      LIMIT 10;
+    `;
+
+  // Fetch user ID based on email
+  db.query(getUserQuery, [email], (err, userResults) => {
+    if (err) {
+      return res.status(500).json({ error: "Database query failed" });
+    }
+
+    if (userResults.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const userId = userResults[0].user_id;
+
+    // Fetch recent transactions based on user ID
+    db.query(getTransactionsQuery, [userId], (err, transactionResults) => {
+      if (err) {
+        return res.status(500).json({ error: "Failed to fetch transactions" });
+      }
+
+      if (transactionResults.length === 0) {
+        return res.status(404).json({ error: "No transactions found" });
+      }
+
+      console.log(transactionResults);
+      res.json(transactionResults);
     });
   });
 });
@@ -357,24 +403,12 @@ app.post("/", async (req, res) => {
 
       // Format the response
       const transactionList = lastTransactions
-        .map((t) => {
-          const formattedDate = new Date(t.transaction_datetime).toLocaleString(
-            "en-US",
-            {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: true,
-            }
-          );
-          return `${t.transaction_type} of $${t.transaction_amount} on ${formattedDate}`;
-        })
+        .map(
+          (t) =>
+            `${t.transaction_type} of $${t.transaction_amount} on ${t.transaction_datetime}`
+        )
         .join("\n");
 
-      console.log(transactionList);
       res.json({
         fulfillmentMessages: [
           {
