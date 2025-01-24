@@ -16,7 +16,7 @@ const RecentTransactions = () => {
 
       axios
         .get(
-          `https://va-bank-api-855220130399.us-central1.run.app/api/recent-transactions?email=urwithdhanu@gmail.com`
+          `https://localhost:3006/api/recent-transactions?email=urwithdhanu@gmail.com`
         )
         .then((response) => {
           const transformedData = transformTransactions(response.data);
