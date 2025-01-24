@@ -24,7 +24,10 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { getLoggedInUser, signIn, signUp } from "@/lib/actions/user.actions";
 import PlaidLink from "./PlaidLink";
-import RecentTransactions from "./RecentTransaction";
+// import RecentTransactions from "./RecentTransaction";
+// import RightSidebar from "./RightSidebar";
+// import DialogflowWidget from "./DialogflowWidget";
+// import DialogflowWidget2 from "./DialogflowWidget2";
 
 const AuthForm = ({ type }: { type: string }) => {
   const router = useRouter();
@@ -98,7 +101,9 @@ const AuthForm = ({ type }: { type: string }) => {
           </h1>
         </Link>
 
-        <RecentTransactions />
+        {/* <RecentTransactions /> */}
+        {/* <RightSidebar /> */}
+        {/* <DialogflowWidget2 userName={"Dhana"} /> */}
         <div className="flex flex-col gap-1 md:gap-3">
           <h1 className="text-24 lg:text-36 font-semibold text-gray-900">
             {user ? "Link Account" : type === "sign-in" ? "Sign In" : "Sign Up"}

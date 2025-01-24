@@ -37,23 +37,57 @@ export const getUserInfo = async ({ userId }: getUserInfoProps) => {
   }
 };
 
+// export const signIn = async ({ email, password }: signInProps) => {
+//   try {
+//     const { account } = await createAdminClient();
+//     const session = await account.createEmailPasswordSession(email, password);
+
+//     cookies().set("appwrite-session", session.secret, {
+//       path: "/",
+//       httpOnly: true,
+//       sameSite: "strict",
+//       secure: true,
+//     });
+
+//     const user = await getUserInfo({ userId: session.userId });
+
+//     return parseStringify(user);
+//   } catch (error) {
+//     console.error("Error", error);
+//   }
+// };
+
 export const signIn = async ({ email, password }: signInProps) => {
   try {
-    const { account } = await createAdminClient();
-    const session = await account.createEmailPasswordSession(email, password);
+    // Mock the session response
+    const mockSession = {
+      userId: "urwithdhanu@gmail.com",
+      secret: "password",
+    };
 
-    cookies().set("appwrite-session", session.secret, {
+    // Mock cookies setup
+    cookies().set("appwrite-session", mockSession.secret, {
       path: "/",
       httpOnly: true,
       sameSite: "strict",
       secure: true,
     });
 
-    const user = await getUserInfo({ userId: session.userId });
+    // Mock user information
+    const mockUser = {
+      userId: mockSession.userId,
+      email,
+      firstName: "Dummy",
+      lastName: "User",
+    };
 
-    return parseStringify(user);
+    console.log("Dummy sign-in successful:", mockUser);
+
+    // Return the mock user info
+    return mockUser;
   } catch (error) {
-    console.error("Error", error);
+    console.error("Error in dummy sign-in:", error);
+    return null;
   }
 };
 
@@ -112,17 +146,64 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
 
 export async function getLoggedInUser() {
   try {
+    // Mock behavior: check environment to determine if real or mock logic is used
+    const isMockEnvironment = process.env.NODE_ENV === "development";
+
+    if (true) {
+      // Return a mocked user object
+      const mockUser = {
+        email: "urwithdhanu@gmail.com",
+        userId: "678e11660010007b79cd",
+        dwollaCustomerUrl:
+          "https://api-sandbox.dwolla.com/customers/24010b6d-0f88-485a-9712-928fd42ce0fa",
+        dwollaCustomerId: "24010b6d-0f88-485a-9712-928fd42ce0fa",
+        firstName: "Dhana Shekhar",
+        lastName: "Tontanahal",
+        address1: "Bolarum 302 3rd floor",
+        city: "New york city",
+        postalCode: "12345",
+        dateOfBirth: "1992-08-29",
+        ssn: "1234",
+        state: "NY",
+        $id: "678e1168001fe040c0b3",
+        $createdAt: "2025-01-20T09:03:35.520+00:00",
+        $updatedAt: "2025-01-20T09:03:35.520+00:00",
+        $permissions: [],
+        $databaseId: "678db84b003b1c0be394",
+        $collectionId: "678db85f000b94da457f",
+      };
+
+      console.log("Mocked user object returned:", mockUser);
+      return mockUser;
+    }
+
+    // Real logic for production environment
     const { account } = await createSessionClient();
     const result = await account.get();
 
     const user = await getUserInfo({ userId: result.$id });
+    console.log(user);
 
     return parseStringify(user);
   } catch (error) {
-    console.log(error);
+    console.log("Error in getLoggedInUser:", error);
     return null;
   }
 }
+
+// export async function getLoggedInUser() {
+//   try {
+//     const { account } = await createSessionClient();
+//     const result = await account.get();
+
+//     const user = await getUserInfo({ userId: result.$id });
+//     console.log(user);
+//     return parseStringify(user);
+//   } catch (error) {
+//     console.log(error);
+//     return null;
+//   }
+// }
 
 export const logoutAccount = async () => {
   try {
