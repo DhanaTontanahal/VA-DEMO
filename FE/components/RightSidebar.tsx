@@ -1,14 +1,27 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BankCard from "./BankCard";
 import { countTransactionCategories } from "@/lib/utils";
 import Category from "./Category";
-import DialogflowWidget from "./DialogflowWidget";
 import DialogflowWidget2 from "./DialogflowWidget2";
 
 const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
   const categories: CategoryCount[] = countTransactionCategories(transactions);
+
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const auth = localStorage.getItem("auth");
+    if (auth) {
+      try {
+        const parsedAuth = JSON.parse(auth);
+        setUserName(parsedAuth.username || "");
+      } catch (error) {
+        console.error("Failed to parse auth object from localStorage", error);
+      }
+    }
+  }, []);
 
   return (
     <>
@@ -75,8 +88,7 @@ const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
 
           <div className="flex w-full justify-between fixed bottom-5 left-0 right-0 px-4">
             <div></div>
-            {/* <DialogflowWidget /> */}
-            <DialogflowWidget2 userName={"Dhana"} />
+            <DialogflowWidget2 userName={userName} />
           </div>
         </section>
       </aside>
