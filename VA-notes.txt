@@ -201,7 +201,7 @@ delete from click_logs where user_id='user_123'
 
 
 =============================================
-==========================
+==========================START FROM HERE
 =================
 
 CREATE TABLE items (
