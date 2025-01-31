@@ -82,13 +82,14 @@ const SpeechRecognitionComponent = (props) => {
         style={{
           cursor: "pointer",
           display: "inline-block",
+          marginRight: "10px",
         }}
         onClick={handleMicOn}
       >
         <div className="mic-icon">
           <Image
-            width={30}
-            height={20}
+            width={32}
+            height={28}
             src={isListening ? "/icons/mic_icon.png" : "/icons/mic_icon.png"}
             alt="Mic Icon"
             style={{

@@ -1,0 +1,104 @@
+docker build -t fastapi-app1 .
+
+docker run -p 8080:8080 fastapi-app1
+
+gcloud auth login
+gcloud config set project voltaic-battery-447511-p5
+
+
+docker tag fastapi-app gcr.io/voltaic-battery-447511-p5/fastapi-app1
+
+docker push gcr.io/voltaic-battery-447511-p5/fastapi-app1
+
+
+gcloud run deploy fastapi-app1 --image gcr.io/voltaic-battery-447511-p5/fastapi-app1 --platform=managed --region us-central1 --allow-unauthenticated
+
+
+
+***********************
+    app.py localcopy backed and new app.py is now placed
+--------------------------------------------------------------------------the below file to be replaced----
+    /** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+        port: "8000",
+        pathname: "/static/**",
+      },
+    ],
+  },
+};
+
+export default nextConfig;
+--------------------------------------------------------------------------------
+     ***************************
+     ----------------------------------------------------------------------------------------replaced as-----------
+     /** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "fastapi-app1-855220130399.us-central1.run.app",
+        pathname: "/static/extracted_images/**", // Adjusted for your image directory
+      },
+    ],
+  },
+};
+
+export default nextConfig;
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------
+gcloud auth activate-service-account 855220130399-compute@developer.gserviceaccount.com --key-file=YOUR_SERVICE_ACCOUNT_KEY.json
+
+
+gcloud config set project voltaic-battery-447511-p5
+
+------------------------PROJECT 1
+
+docker build -t gcr.io/voltaic-battery-447511-p5/va-nodejs-appj31 .
+
+docker push gcr.io/voltaic-battery-447511-p5/va-nodejs-app31
+
+
+
+gcloud run deploy va-nodejs-app --image gcr.io/voltaic-battery-447511-p5/va-nodejs-app31 --platform managed --region us-central1 --allow-unauthenticated 
+--service-account 855220130399-compute@developer.gserviceaccount.com 
+  --set-env-vars INSTANCE_CONNECTION_NAME="voltaic-battery-447511-p5:us-central1:va-db",DB_USER="root",DB_PASS="yourpassword",DB_NAME="menu_logger",PORT=8080
+
+
+the app got deployed to the same instance , we should have used gcloud run deploy va-nodejs-app31 instead of gcloud run deploy va-nodejs-app 
+thats ok since upload FunctionCallingMode;ity api was added was skeptical if that would workerData, that worked
+
+----------------------------------------PROJECT 2-=--------------------ZI think project 2 is related to dialogflow no changes there-----------------
+
+
+docker build -t gcr.io/voltaic-battery-447511-p5/va-nodejs-app2 .
+
+docker push gcr.io/voltaic-battery-447511-p5/va-nodejs-app2
+
+
+gcloud run deploy va-nodejs-app2 
+  --image gcr.io/voltaic-battery-447511-p5/va-nodejs-app2 
+  --platform managed 
+  --region us-central1 
+  --allow-unauthenticated 
+  --service-account 855220130399-compute@developer.gserviceaccount.com
+ 
+  --set-env-vars INSTANCE_CONNECTION_NAME="voltaic-battery-447511-p5:us-central1:va-db",DB_USER="root",DB_PASS="yourpassword",DB_NAME="menu_logger",PORT=8080
+
+
+------------------------------------upload-----------------
+
+gcloud projects add-iam-policy-binding voltaic-battery-447511-p5 --member=serviceAccount:855220130399-compute@developer.gserviceaccount.com --role=roles/storage.admin
+
+gcloud storage buckets add-iam-policy-binding uploadeduserdocs \
+  --member=serviceAccount:855220130399-compute@developer.gserviceaccount.com \
+  --role=roles/storage.objectAdmin
+
+
