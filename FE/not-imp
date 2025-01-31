@@ -1,17 +1,17 @@
-docker build -t fastapi-app1 .
+docker build -t fastapi-app2 .
 
-docker run -p 8080:8080 fastapi-app1
+docker run -p 8080:8080 fastapi-app2
 
 gcloud auth login
 gcloud config set project voltaic-battery-447511-p5
 
 
-docker tag fastapi-app gcr.io/voltaic-battery-447511-p5/fastapi-app1
+docker tag fastapi-app2 gcr.io/voltaic-battery-447511-p5/fastapi-app2
 
-docker push gcr.io/voltaic-battery-447511-p5/fastapi-app1
+docker push gcr.io/voltaic-battery-447511-p5/fastapi-app2
 
 
-gcloud run deploy fastapi-app1 --image gcr.io/voltaic-battery-447511-p5/fastapi-app1 --platform=managed --region us-central1 --allow-unauthenticated
+gcloud run deploy fastapi-app2 --image gcr.io/voltaic-battery-447511-p5/fastapi-app2 --platform=managed --region us-central1 --allow-unauthenticated
 
 
 
@@ -42,7 +42,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "fastapi-app1-855220130399.us-central1.run.app",
+        hostname: "fastapi-app2-855220130399.us-central1.run.app",
         pathname: "/static/extracted_images/**", // Adjusted for your image directory
       },
     ],

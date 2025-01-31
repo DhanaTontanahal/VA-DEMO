@@ -58,13 +58,13 @@ const ChatHistory = ({
 
       {isTyping && (
         <div className="chat-message assistant-message">
-          <Image
+          {/* <Image
             width={40}
             height={40}
             src={"/icons/lloyds_response_icon.png"}
             alt="Assistant Typing"
             className="chat-icon"
-          />
+          /> */}
           <p>...</p>
         </div>
       )}

@@ -1,5 +1,6 @@
 /* Chat header */
 .chat-header {
+    display: flex;
     background-color: #11b67a;
     color: white;
     padding: 15px;

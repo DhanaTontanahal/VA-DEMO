@@ -3,6 +3,7 @@ import ChatHeader from "./ChatHeader";
 import ChatHistory from "./ChatHistory";
 import ChatInput from "./ChatInput";
 import ImageModal from "./ImageModal";
+import "./Main.css";
 
 const Main = (props) => {
   const [input, setInput] = useState("");
@@ -26,7 +27,7 @@ const Main = (props) => {
 
     try {
       const response = await fetch(
-        "https://fastapi-app1-855220130399.us-central1.run.app/api/query",
+        "https://fastapi-app3-855220130399.us-central1.run.app/api/query",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -106,6 +107,12 @@ const Main = (props) => {
         selectedImage={selectedImage}
         onClose={() => setSelectedImage(null)}
       />
+      <br />
+      <p className="bottom-info">
+        Lloyds Bank plc is a major British retail and commercial bank with a
+        significant presence across England and Wales. It has traditionally been
+        regarded one of the "Big Four" clearing banks{" "}
+      </p>
     </div>
   );
 };

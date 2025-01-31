@@ -1,0 +1,104 @@
+import React, { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import { motion } from "framer-motion";
+import Image from "next/image";
+
+const ChatResponse = ({ message, videoLink }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
+
+  if (!message && !videoLink) return null;
+
+  // Check if the response contains an image link
+  const isImage = message.trim().match(/\.(jpeg|jpg|gif|png)$/);
+
+  // Check if the response contains a YouTube link
+  const isYouTubeVideo =
+    videoLink?.includes("youtube.com") || videoLink?.includes("youtu.be");
+
+  // Function to open image in a popup modal
+  const openImageModal = (imgSrc) => {
+    setSelectedImage(imgSrc);
+    setIsOpen(true);
+  };
+
+  // Function to close the modal
+  const closeModal = () => {
+    setIsOpen(false);
+    setSelectedImage("");
+  };
+
+  return (
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="p-4 bg-gray-100 border border-gray-300 rounded-md shadow-md mt-2"
+      >
+        {/* Display Message */}
+        {isImage ? (
+          <div className="image-wrapper">
+            <Image
+              width={300}
+              height={300}
+              src={message}
+              alt="Response Image"
+              className="chat-image cursor-pointer"
+              unoptimized={true}
+              onClick={() => openImageModal(message)}
+            />
+          </div>
+        ) : (
+          <ReactMarkdown className="text-gray-800 leading-relaxed">
+            {message}
+          </ReactMarkdown>
+        )}
+
+        {/* Display Video if Available */}
+        {videoLink && (
+          <div className="video-container mt-3">
+            {isYouTubeVideo ? (
+              // Embed YouTube Video
+              <iframe
+                width="100%"
+                height="250"
+                src={videoLink.replace("watch?v=", "embed/")}
+                title="Video Response"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            ) : (
+              // Embed MP4 or other direct video links
+              <video width="100%" height="250" controls>
+                <source src={videoLink} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            )}
+          </div>
+        )}
+      </motion.div>
+
+      {/* Image Modal */}
+      {isOpen && (
+        <div className="image-modal" onClick={closeModal}>
+          <div className="modal-content">
+            <span className="close-button" onClick={closeModal}>
+              &times;
+            </span>
+            <Image
+              width={300}
+              height={300}
+              src={selectedImage}
+              alt="Expanded View"
+              className="modal-image"
+            />
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default ChatResponse;

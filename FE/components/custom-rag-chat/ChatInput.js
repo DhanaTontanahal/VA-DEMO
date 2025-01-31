@@ -20,7 +20,7 @@ const ChatInput = ({ input, setInput, handleSend }) => {
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="Ask anything..."
+        placeholder="How can I help you today?"
       />
 
       <button
